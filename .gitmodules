@@ -1,0 +1,9 @@
+[submodule "test-plate-getaway"]
+	path = test-plate-getaway
+	url = https://github.com/KBcHMFollower/test-plate-getaway.git
+[submodule "blog_user_service"]
+	path = blog_user_service
+	url = https://github.com/KBcHMFollower/blog_user_service.git
+[submodule "blog_posts_service"]
+	path = blog_posts_service
+	url = https://github.com/KBcHMFollower/blog_posts_service.git

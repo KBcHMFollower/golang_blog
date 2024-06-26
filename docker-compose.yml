@@ -25,6 +25,54 @@ services:
             mc mb myminio/mybucket && \
             mc policy set download myminio/mybucket
             "
+  users-service:
+    build:
+      context: ./blog_user_service
+      dockerfile: Dockerfile
+    ports:
+      - "44044:44044"
+    depends_on:
+      - users-db
+
+  users-db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: golang_users
+    volumes:
+      - users-db-data:/var/lib/postgresql/data
+
+  posts-service:
+    build:
+      context: ./blog_posts_service
+      dockerfile: Dockerfile
+    ports:
+      - "4041:4041"
+    depends_on:
+      - posts-db
+
+  posts-db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: golang_posts
+    volumes:
+      - posts-db-data:/var/lib/postgresql/data
+
+  getaway:
+    build:
+      context: ./test-plate-getaway
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - users-service
+      - posts-service
 
 volumes:
   minio-data:
+  posts-db-data:
+  users-db-data:
+
