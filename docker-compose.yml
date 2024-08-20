@@ -43,6 +43,29 @@ services:
     volumes:
       - users-db-data:/var/lib/postgresql/data
 
+  users-redis:
+    image: redis:latest
+    container_name: users-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - users-redis-data:/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # AMQP порт для подключения клиентов
+      - "15672:15672" # HTTP порт для доступа к веб-интерфейсу управления
+    environment:
+      RABBITMQ_DEFAULT_USER: guest   # Имя пользователя по умолчанию
+      RABBITMQ_DEFAULT_PASS: guest   # Пароль пользователя по умолчанию
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq # Монтирование данных для сохранения состояния
+    networks:
+      - rabbitmq_network
+
   posts-service:
     build:
       context: ./blog_posts_service
@@ -75,4 +98,9 @@ volumes:
   minio-data:
   posts-db-data:
   users-db-data:
+  users-redis-data:
+  rabbitmq_data:
+
+networks:
+  rabbitmq_network:
 
